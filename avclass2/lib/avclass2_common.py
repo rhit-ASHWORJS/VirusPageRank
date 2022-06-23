@@ -432,7 +432,12 @@ class AvLabels:
                                   lambda x: x in string.printable,
                                     label)).strip()
                 label_pairs.append((av, clean_label))
+                # print('--')
+                # print(av)
+                # print(clean_label)
+                # print('--')
         # Obtain VT tags, if available
+        # print(label_pairs)
         vt_tags = vt_rep.get('tags', [])
 
         return SampleInfo(md5, sha1, sha256, label_pairs, vt_tags)

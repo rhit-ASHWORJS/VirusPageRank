@@ -129,6 +129,7 @@ def main(args):
         # Debug info, file processed
         sys.stderr.write('[-] Processing input file %s\n' % ifile)
 
+        sys.stderr.write('output boi')
         # Process all lines in file
         for line in fd:
 
@@ -177,6 +178,7 @@ def main(args):
             try:
                 av_tmp = av_labels.get_sample_tags(sample_info)
                 tags = av_labels.rank_tags(av_tmp)
+                
 
                 # AV VENDORS PER TOKEN
                 if args.avtags:
@@ -187,6 +189,7 @@ def main(args):
                             tmap[av] = ctr + 1
                         avtags_dict[t] = tmap
 
+                #Runnin
                 if args.aliasdetect:
                     prev_tokens = set()
                     for entry in tags:
@@ -205,6 +208,7 @@ def main(args):
                 # Collect stats
                 # FIX: should iterate once over tags, 
                 # for both stats and aliasdetect
+                #runnin
                 if tags:
                     stats["tagged"] += 1
                     if args.stats:
@@ -254,14 +258,20 @@ def main(args):
                     vtt = ""
 
                 # Print family (and ground truth if available) to stdout
+                #myprint
                 if not args.c:
                     if args.path:
                         tag_str = format_tag_pairs(tags, av_labels.taxonomy)
                     else:
                         tag_str = format_tag_pairs(tags)
-                    sys.stdout.write('%s\t%d\t%s%s%s%s\n' %
-                                     (name, vt_count, tag_str, gt_family,
-                                      is_pup_str, vtt))
+                    # sys.stdout.write('%s\t%d\t%s%s%s%s\n' %
+                    #                  (name, vt_count, tag_str, gt_family,
+                    #                   is_pup_str, vtt))
+                    sys.stdout.write("{'tag':'%s', 'votes':" % (name))
+                    print(av_tmp, end='')
+                    sys.stdout.write('}\n')
+                    # print(av_labels.taxonomy)
+
                 else:
                     sys.stdout.write('%s\t%s%s%s\n' %
                                      (name, fam, gt_family, is_pup_str))
