@@ -129,7 +129,12 @@ def main(args):
         # Debug info, file processed
         sys.stderr.write('[-] Processing input file %s\n' % ifile)
 
-        sys.stderr.write('output boi')
+        processed = 0
+        viruses = []
+        antiviruses = []
+
+        votedict = {}
+
         # Process all lines in file
         for line in fd:
 
@@ -165,7 +170,7 @@ def main(args):
 
             # If the VT report has no AV labels, output and continue
             if not sample_info.labels:
-                sys.stdout.write('%s\t-\t[]\n' % (name))
+                # sys.stdout.write('%s\t-\t[]\n' % (name))
                 # sys.stderr.write('\nNo AV labels for %s\n' % name)
                 # sys.stderr.flush()
                 continue
@@ -267,31 +272,63 @@ def main(args):
                     # sys.stdout.write('%s\t%d\t%s%s%s%s\n' %
                     #                  (name, vt_count, tag_str, gt_family,
                     #                   is_pup_str, vtt))
-                    sys.stdout.write("{'tag':'%s', 'votes':" % (name))
-                    print(av_tmp, end='')
-                    sys.stdout.write('}\n')
+                    # print(tag_str)
+
+                    if name not in viruses:
+                        viruses.append(name)
+
+                    for key in av_tmp.keys():
+                        avlist = av_tmp[key]
+                        for av in avlist:
+                            if av not in antiviruses:
+                                antiviruses.append(av)
+                    
+                    for tag in av_tmp.keys():
+                        if tag in ['01c02300fa', '15872a', '180solutions', '1clickdownload', '1gwaasep03e', '2345explorer', '383media', '4fd2e94b', '4shared', '5616bd', '84f6ca', 'aabe', 'aahe', 'abcu', 'accphish', 'acvt', 'acwbdswuqlp', 'adaebook', 'adagent', 'adclicer', 'addlyrics', 'addrop', 'adduser', 'adgazelle', 'adhelper', 'adinstaller', 'adkor', 'adloader', 'adond', 'adsuproot', 'adsvc', 'adultbrowser', 'advancedpccare', 'advheur', 'adwapper', 'adwareprofessional', 'adwin', 'afio', 'agentb', 'agobot', 'airinstaller', 'aksula', 'aliser', 'allaple', 'alman', 'alnaddy', 'alphabet', 'aluigi', 'alyak', 'amonetize', 'antavmu', 'antilam', 'antivirus', 'antivirusapp', 'antivirushijack', 'anyprotect', 'appshake', 'archsms', 'ardamax', 'ardurk', 'aspxor', 'asterisk', 'atraps', 'atros', 'au0ba0o9aili', 'audhi', 'autinject', 'autit', 'avdown', 'avinfoassist', 'b7c2a', 'babonock', 'babylon', 'badjoke', 'badur', 'bagle', 'baidu', 'baidusearch', 'balisdat', 'bamgadin', 'bamital', 'banayu', 'banbra', 'bancos', 'bandoo', 'banload', 'banz', 'barys', 'baryumka', 'basun', 'bawswerps', 'bayrob', 'bbbn', 'bdgk', 'beastdoor', 'beaugrit', 'bebo', 'beebone', 'begman', 'begseabug', 'behav', 'benjamin', 'berbew', 'bertle', 'bestafera', 'betabot', 'betload', 'betterinternet', 'bettersurf', 'bezigate', 'bhouninstaller', 'bibei', 'bicololo', 'bifrose', 'bifrost', 'binder', 'bindex', 'bionet', 'bitcro', 'bitman', 'black', 'blackhole', 'blackshades', 'bladabindi', 'blafixel', 'blakamba', 'blanajog', 'blazgel', 'blihan', 'blohi', 'bloored', 'blueh', 'bluesoft', 'bmkexmzzylgi', 'bmmedia', 'boaxxe', 'bobax', 'bobrowser', 'boht', 'bomgar', 'boopcel', 'boran', 'bototer', 'bprotector', 'braban', 'brappware', 'bredavi', 'bredolab', 'brontok', 'browsec', 'browsecx', 'browsefox', 'browserguard', 'browserpassview', 'browshot', 'brrowho', 'bruteforce', 'btmagnat', 'bublik', 'bulta', 'bundleloader', 'bundlore', 'bunitu', 'buterat', 'buzus', 'buzy', 'bzub', 'c4dlmedia', 'cain', 'calac', 'calper', 'capredeam', 'capsfin', 'carberp', 'cardspy', 'cashfiesta', 'cassiopeia', 'catalina', 'ceeinject', 'cekar', 'celofot', 'centrumloader', 'cerber', 'cgau', 'cgub', 'cheatengine', 'chifrax', 'chinad', 'chinbo', 'chindo', 'chir', 'chisburg', 'chiton', 'cidox', 'cinmus', 'cleaman', 'clikug', 'clons', 'cloudguard', 'cmqabctwk6ci', 'cnbtech', 'cngp', 'cnnic', 'cnzzbot', 'codewall', 'codiby', 'cognosads', 'coidung', 'collected', 'colooader', 'comame', 'compete', 'computrace', 'comrerop', 'conduit', 'confuser', 'consmiper', 'constructor', 'convertad', 'coolmirage', 'cosmicduke', 'cosmu', 'cosne', 'cospet', 'cossta', 'coulomb', 'couponmarvel', 'coupons', 'cpete', 'cpush', 'craagle', 'crawler', 'crime', 'critloki', 'crossrider', 'crowti', 'cryakl', 'cryfile', 'crypmodadv', 'cryptolocker', 'cryptos', 'crytex', 'csdimonetize', 'cutwail', 'cwqh', 'cybergate', 'cycbot', 'dadobra', 'dagava', 'dalexis', 'danginex', 'dapato', 'darkkomet', 'dartsmound', 'dater', 'davobevix', 'daws', 'dealply', 'deepsea', 'defaulttab', 'delbar', 'delf', 'delfi', 'delfiles', 'delfinject', 'delflash', 'delphi', 'delud', 'demp', 'dervec', 'deshacop', 'detnat', 'detroie', 'dewnad', 'dfsm', 'dial', 'dialupass', 'diamin', 'digitala', 'dinwod', 'dipad', 'diplugem', 'directdownloader', 'disfa', 'diztakun', 'dlboost', 'dlhelper', 'dllinject', 'dluca', 'dnguard', 'dnschanger', 'dnsunlocker', 'dodiw', 'doedlid', 'dofoil', 'dollarrevenue', 'domaiq', 'dorando', 'dorf', 'dorgam', 'dorifel', 'dorkbot', 'dorn', 'dorv', 'dotdo', 'dowgav', 'downloadadmin', 'downloadassistant', 'downloadguide', 'downloadhelper', 'downloadsponsor', 'downvision', 'dprotect', 'dridex', 'driverupdate', 'drmsoft', 'drolnux', 'droma', 'dsbot', 'dudra', 'dumaru', 'dumpy', 'dunsenr', 'dupator', 'dvhf', 'dwis', 'dybalom', 'dycler', 'dynamer', 'dyre', 'easyspeedcheck', 'ebgx', 'edeals', 'edownloader', 'eggnog', 'egroupdial', 'eibdbsjvwn', 'eicartest', 'elex', 'elitemax', 'elzob', 'emager', 'emotet', 'enchanim', 'enigma', 'enigmaprotector', 'enistery', 'enterok', 'eorezo', 'epack', 'epicscale', 'ertfor', 'esfury', 'eszjuxuan', 'etranslatorpro', 'eupuds', 'excrevie', 'exent', 'exetemp', 'expiro', 'express', 'expressdownloader', 'expressinstaller', 'extbro', 'extcrome', 'extenbro', 'eyestye', 'eziriznetreactor', 'ezula', 'fakeal', 'fakefolder', 'fakeie', 'fakeinit', 'fakeinstaller', 'fakeqq', 'fakerean', 'fakespypro', 'fakesysdef', 'faketool', 'fakewindow', 'fareit', 'farfli', 'fasong', 'fayu', 'fearso', 'fednu', 'fenomengame', 'fesber', 'filefinder', 'filemonster', 'filetour', 'filoskeed', 'firseria', 'firstfloor', 'firstinj', 'fleercivet', 'flowspirit', 'flystudio', 'fmjfas7dkyc', 'folcom', 'forcestartpage', 'fosniw', 'fostsy', 'fourthrem', 'fraudload', 'fraudpack', 'fraudrop', 'fraudster', 'frelex', 'frethog', 'fsysna', 'fuck', 'fujacks', 'fulfillingapps', 'fullscreen', 'funapps', 'funlove', 'fusing', 'fusioncore', 'gamarue', 'game', 'gamehack', 'gamehuck', 'gamemodding', 'gametea', 'gamethief', 'gametool', 'gamevance', 'gamup', 'ganelp', 'ganipin', 'garrun', 'gatak', 'gator', 'gbdialer', 'gemius', 'gena', 'gendal', 'genkryptik', 'genocide', 'gepys', 'geral', 'gesong', 'gessto', 'getnow', 'gibi', 'gigaclicks', 'gimemo', 'gippers', 'girlinred', 'globalupdate', 'glox', 'glupteba', 'gmunpackerinstaller', 'gobot', 'goforfiles', 'gofot', 'goldun', 'golroted', 'goobzo', 'googupdate', 'goredir', 'goriadu', 'gorillaprice', 'gotango', 'grandmedia', 'graybird', 'grenam', 'guagua', 'gudra', 'hacdef', 'hackav', 'hafen', 'hakaglan', 'hamweq', 'harnig', 'haxspy', 'hbpw', 'hebogo', 'heim', 'heri', 'heye', 'hezhi', 'hfyi', 'hicrazyk', 'hiddencamera', 'hiddeninstall', 'hidebaid', 'hideexec', 'hideicon', 'hideproc', 'hidewindows', 'hijacker', 'hiloti', 'hlubea', 'hlux', 'hmgfasxx', 'hmtoolbar', 'hoax', 'homa', 'hometab', 'hongdawanfang', 'hopadef', 'horst', 'hosts', 'hotbar', 'hotdownloads', 'hpdefender', 'hrup', 'huhk', 'hupigon', 'hype', 'i1sk', 'ibryte', 'iciko', 'icloader', 'idlekms', 'ilcrypt', 'ilheur', 'iluspy', 'imali', 'imestartup', 'iminent', 'inbox', 'induc', 'innomod', 'inservice', 'installall', 'installbrain', 'installcore', 'installerex', 'installflash', 'installiq', 'installmate', 'installmetrix', 'installmonetizer', 'installmonster', 'installtoolbar', 'instally', 'invader', 'iobit', 'ipamor', 'ircbot', 'iroffer', 'irplan', 'istartsurf', 'iterign', 'itorrent', 'iwin', 'jaik', 'jaku', 'jakuz', 'jatif', 'jawego', 'jeefo', 'jevafus', 'jewdo', 'jintor', 'joiner', 'jongiti', 'joosoft', 'jottix', 'jrat', 'judo', 'juntador', 'jyfi', 'kapser', 'kasidet', 'kasinst', 'katar', 'kedebe', 'kelihos', 'keybase', 'keyloggeronline', 'keymake', 'keystart', 'kflate', 'kiayksayren', 'kiction', 'kilim', 'killproc', 'klez', 'klovbot', 'koblu', 'kolab', 'kolabc', 'komodia', 'koobface', 'koutodoor', 'kovter', 'kraddare', 'kranet', 'krunchy', 'kuaiba', 'kuluoz', 'kuping', 'laban', 'lamer', 'laqma', 'ldpinch', 'lebag', 'lenovo', 'lethic', 'liha', 'liimpact', 'limitail', 'lineage', 'linkoptimizer', 'linkular', 'linkury', 'lipler', 'llac', 'lmir', 'lnkwinkap', 'loader', 'loadmoney', 'loadwar', 'locky', 'lohocla', 'lola', 'lollipop', 'loring', 'loudmo', 'loveletter', 'lovesong', 'lowzones', 'ltlogger', 'luder', 'luhe', 'lunam', 'lydra', 'lynx', 'lyposit', 'lyrics', 'mabezat', 'madon', 'maener', 'magania', 'magicbit', 'mailpassview', 'malex', 'malwareromovalbot', 'malwares', 'mamianune', 'manbat', 'mantal', 'maozhi', 'mapdimp', 'mapler', 'mask', 'masta', 'matsnu', 'maxdriver', 'maxiget', 'maximus', 'mayachok', 'medfos', 'mediadrug', 'mediafinder', 'mediaget', 'mediamagnet', 'megasearch', 'meinhudong', 'memery', 'menti', 'mepaow', 'messengerplus', 'messo', 'mewsspy', 'mh0aawheovm', 'michela', 'microfake', 'microjoin', 'midia', 'midie', 'mikey', 'mimail', 'mimikatz', 'minari', 'minggy', 'miniduke', 'minilash', 'mira', 'misskaz', 'mizenota', 'mkar', 'mobler', 'mofin', 'mogoogwi', 'mokes', 'moleboxultra', 'moleboxvs', 'monder', 'monitoringtool', 'moonlight', 'mozla', 'mpress', 'msildrop', 'msilinj', 'msilkrypt', 'msilperseus', 'msposer', 'mudrop', 'multibar', 'multidl', 'multidropper', 'multipacked', 'multiplug', 'multitoolbar', 'murofet', 'musin', 'mutabaha', 'mydoom', 'mypcbackup', 'mytob', 'mytonel', 'mywebsearch', 'myxah', 'nagoot', 'nagram', 'nakuru', 'nanobot', 'nanocore', 'narcha', 'navipromo', 'nayrabot', 'nbdd', 'necast', 'necurs', 'neobar', 'neojit', 'nepoe', 'neshta', 'netcat', 'netins', 'netpass', 'netseal', 'netshrink', 'netsky', 'nettool', 'netwiredrc', 'neurevt', 'newloader', 'newplayer', 'nextlive', 'ngrbot', 'nieguide', 'nitol', 'nivasteg', 'nivdort', 'njrat', 'noadware', 'noancooe', 'noobyprotect', 'noplemento', 'nosok', 'nsanti', 'nsismod', 'nspm', 'ntrootkit', 'nuprader', 'nurech', 'nurjax', 'nymaim', 'observer', 'oc1bzuzfpooj', 'ociyota', 'ocna', 'ocsbundle', 'offend', 'offtoup', 'oficla', 'oleloa', 'olufus', 'omaneat', 'oneclickdownloader', 'onescan', 'onesystemcare', 'onlgame', 'onlinegames', 'opanki', 'opencandy', 'openinstall', 'opiker', 'optimizer', 'optimizerelitemax', 'optix', 'orbus', 'orcusrot', 'orsam', 'orto', 'otezinu', 'outbrowse', 'oxypumper', 'packedent', 'pakes', 'palevo', 'papras', 'parite', 'paskod', 'passfox', 'pasta', 'pastaleads', 'pcast', 'pcclient', 'pcfixcleaner', 'pchealthboost', 'pckeeper', 'pcmega', 'peermarket', 'pef13c', 'pennybee', 'penzievs', 'perflogger', 'perinet', 'perion', 'perkesh', 'personalsheild', 'pfoenic', 'pgpme', 'pher', 'phires', 'phorpiex', 'piccolor', 'picsys', 'pincav', 'pinguide', 'pintu', 'pioneer', 'piptea', 'pirminay', 'pistolar', 'pitit', 'pjtbinder', 'playmp3z', 'plemood', 'plimrost', 'plorexie', 'plsex', 'pluginaccess', 'plugx', 'podnuha', 'poison', 'polip', 'polycrypt', 'pondfull', 'popad', 'popdeals', 'pophot', 'pornoblocker', 'porntool', 'powp', 'pricegong', 'prifou', 'primecasino', 'privateexeprotector', 'processpatcher', 'procpatcher', 'proinstall', 'prorat', 'prosti', 'protector', 'protux', 'proxychanger', 'pskill', 'psoriasis', 
+                        'pswtool', 'pugeju', 'pullupdate', 'puma', 'purityscan', 'pvlognetprotector', 'pwdump', 'pwsime', 'pwszbot', 'pykspa', 'qaccel', 'qadars', 'qbot', 'qeds', 'qhost', 'qihoo', 'qiwmonk', 'qjwmonkey', 'qqfish', 'qqgetpass', 'qqhelper', 'qqpass', 'qqrob', 'qqware', 'qsii', 'quervar', 'quireap', 'rack', 'radmin', 'radonskra', 'ramdo', 'ramnit', 'ranapama', 'ranbyus', 'ranos', 'ranserkd', 'ravs', 'rayra', 'razy', 'rbot', 'rebhip', 'recal', 'recam', 'recodrop', 'reconyc', 'recslurp', 'redaptor', 'redgirl', 'redosdru', 'redyms', 'refroso', 'registrybooster', 'regprocleaner', 'regrun', 'regsup', 'reimagerepair', 'reklosoft', 'relevantknowledge', 'relnek', 'remoteadmin', 'renaz', 'renos', 'resdro', 'resur', 'rewriteboota', 'ridnu', 'rimod', 'ripinip', 'rjump', 'rkproc', 'rlsloup', 'rockettab', 'rodecap', 'rofin', 'rombrast', 'rontokbro', 'ropest', 'rottentu', 'rovnix', 'rozena', 'rubar', 'rubinurd', 'rukap', 'rukoma', 'rukometa', 'runner', 'ruskill', 'rustock', 'sacto', 'sadenav', 'sahat', 'sality', 'samon', 'sanctionedmedia', 'sasfis', 'sasquor', 'sbwatchman', 'sbyinying', 'scar', 'scarpnex', 'scarsi', 'sciagnij', 'scramblewrapper', 'sdbot', 'sdld', 'searchaid', 'securityxploded', 'sefnit', 'sekur', 'selfish', 'senta', 'seodec', 'sfdld', 'sfone', 'sfuzuan', 'sfvwg', 'shade', 'shakblades', 'shaosmine', 'sharik', 'shark', 'shelma', 'shenzhen', 'shipup', 'shiz', 'shodi', 'shopper', 'shopperpro', 'shopperz', 'shopro', 'shouqu', 'shutdowner', 'shyape', 'shylock', 'siggen3ent', 'sikeaqnqmgjb', 'silcon', 'sileco', 'silly', 'sillyfdc', 'sillyw', 'simbot', 'simda', 'similagro', 'simplefiles', 'simplytech', 'sinowal', 'sinresby', 'sisbot', 'sisproc', 'sisron', 'sivis', 'sixer', 'skeeyah', 'skillis', 'skintrim', 'skor', 'sksocket', 'skyli', 'slenfbot', 'slimware', 'slmvwk', 'slugin', 'slym', 'smalltro', 'smartapps', 'smartassembly', 'smartfixer', 'smartfortress', 'smartinstaller', 'smee', 'smileonline', 'smshoax', 'smwnd', 'sober', 'socks', 'soft', 'soft2cn', 'soft32downloader', 'softcnapp', 'softobase', 'softomate', 'softonic', 'softpulse', 'sogou', 'sohanad', 'sohand', 'sohuva', 'somoto', 'sopinar', 'soulclose', 'sourtoff', 'soxgrave', 'spafx', 'spammy', 'speedbit', 'speedingupmypc', 'speil', 'spigot', 'spnr', 'sprotector', 'spybot', 'spyeye', 'spynet', 'spywarebot', 'squarenet', 'sram', 'staget', 'stagol', 'startsurf', 'staser', 'steam', 'stegvob', 'stimilik', 'stresid', 'stressreducer', 'strumapine', 'stub', 'subtab', 'superfish', 'supertuneup', 'surveyer', 'susnn', 'suweezy', 'svcminer', 'swisyn', 'swizzor', 'swrort', 'syddld', 'syncopate', 'sysn', 'systemcall', 'systemdefender', 'systemhealer', 'systemtool', 'systemtweaker', 'systex', 'systroj', 'systweak', 'sytro', 'tank', 'taobao', 'taojinstar', 'taranis', 'tc3ahj7nvlei', 'tcpscan', 'tdss', 'techsnab', 'temonde', 'tempedreve', 'temr', 'tencent', 'tenga', 'terkcop', 'teront', 'teslacrypt', 'testing', 'tibia', 'tibs', 'tinba', 'tirrip', 'tiyy', 'tmhfbm4amkj', 'tobfy', 'tofsee', 'toga', 'toggle', 'tonmye', 'topa', 'topmedia', 'toptools', 'torntv', 'torr', 'torrentclient', 'torrentsearch', 'toxic', 'tpyn', 'trojannotifier', 'truedownloader', 'trustezeb', 'trymedia', 'tufik', 'turbobit', 'turist', 'turkojan', 'tuscas', 'twexag', 'u07aby', 'ubibila', 'ubot', 'ugmk', 'ulpm', 'ultimatedefender', 'umnfrvwrr2pib', 'uniblue', 'unruy', 'upatre', 'urausy', 'urelas', 'ursnif', 'usteal', 'valcaryx', 'vanbot', 'vapsup', 'vasor', 'vbates', 'vbclone', 'vbinder', 'vbklog', 'vbkryjetor', 'vbran', 'vburses', 'vdld', 'vehidis', 'venik', 'verind', 'vermid', 'vernet', 'verti', 'veryhighconfidence', 'vidro', 'vietkey', 'viking', 'vilsel', 'vindor', 'virledi', 'virlock', 'virtumonde', 'virut', 'visicom', 'vitruvian', 'vittalia', 'vkhost', 'vkont', 'vmpbad', 'vmprotbad', 'vobfus', 'vonteera', 'vopackage', 'vopak', 'vorloma', 'vprotect', 'vtflooder', 'vundo', 'wabot', 'wajam', 'waldek', 'walta', 'wammuras', 'wapomi', 'warmup', 'watchman', 'wavipeg', 'wdjange', 'wdjiange', 'webalta', 'webbar', 'webcake', 'webdevaz', 'webfilter', 'webhat', 'webprefix', 'webtoos', 'webwatcher', 'wecod', 'weiduan', 'weird', 'wenper', 'wews', 'whiteice', 'widdit', 'widgi', 'wigon', 'wimg', 'winactivator', 'windef', 'winemm', 'winfetcher', 'wininf', 'winloadsda', 'winlock', 'winner', 'winsecsrv', 'wintrim', 'winvnc', 'winwebsec', 'winwrapper', 'wizzcaster', 'wizzlab', 'wlksm', 'wlord', 'wonton', 'wootbot', 'wowlik', 'wpakill', 'wprotmanager', 'writos', 'wsgame', 'wslhq', 'wswhacker', 'wuji', 'xadupi', 'xanfpezes', 'xetapp', 'xhnl', 'xiaohao', 'xiaoho', 'xiaoxiong', 'xiazai', 'ximera', 'xiquitir', 'xmkfrtraoceb', 'xorala', 'xorer', 'xorist', 'xpaj', 'xpyn', 'xtrat', 'xyligan', 'yabector', 'yabinder', 'yahlover', 'yakes', 'yantai', 'yappyz', 'yazz', 'yelloader', 'yellsob', 'yemrok', 'ymeta', 'yobdam', 'yoddos', 'yogosojo', 'yourinstaller', 'youxun', 'yqwaaasdfofb', 'yu0bfdsueddi', 'yuner', 'zafi', 'zanoza', 'zapchast', 'zbot', 'zboter', 'zeeborot', 'zegost', 'zemot', 'zepfod', 'zerber', 'zeroaccess', 'zestyfind', 'zhangguojian', 'zlob', 'zmlfa4s3unlb', 'zombienews', 'zonebac', 'zorg', 'zortob', 'zugo', 'zurgop', 'zusy', 'zuten', 'zvuzona', 'zxrloader', 'zygug', 'zylom', 'zzinfor']:
+                            avlist = av_tmp[key]
+                            for antivirus in avlist:
+                                votedict[str(antivirus) + ":" + str(name)] = tag
+                            # votedict["abc:123"] = "cool"
+                    # print("processed: " + str(processed))
+                    processed = processed + 1
                     # print(av_labels.taxonomy)
 
-                else:
-                    sys.stdout.write('%s\t%s%s%s\n' %
-                                     (name, fam, gt_family, is_pup_str))
+                # else:
+                    # sys.stdout.write('%s\t%s%s%s\n' %
+                    #                  (name, fam, gt_family, is_pup_str))
             except:
                 traceback.print_exc(file=sys.stderr)
                 continue
+        
+        sys.stdout.write("TopLeft")
+        for virus in viruses:
+            sys.stdout.write(","+virus)
+        sys.stdout.write("\n")
 
+        for antivirus in antiviruses:
+            # for char in antivirus:
+            #     sys.stdout.write(char)
+            sys.stdout.write(antivirus.replace("—","-").replace("–","-"))
+            for virus in viruses:
+                if (antivirus + ":" + virus) in votedict.keys():
+                    sys.stdout.write("," + votedict[antivirus + ":" + virus])
+                else:
+                    sys.stdout.write("," + "_")
+            sys.stdout.write("\n")
         # Debug info
-        sys.stderr.write('\r[-] %d JSON read' % vt_all)
-        sys.stderr.flush()
-        sys.stderr.write('\n')
+        # sys.stderr.write('\r[-] %d JSON read' % vt_all)
+        # sys.stderr.flush()
+        # sys.stderr.write('\n')
 
         # Close file
         fd.close()
 
     # Print statistics
-    sys.stderr.write(
-            "[-] Samples: %d NoScans: %d NoTags: %d GroundTruth: %d\n" % (
-                vt_all, stats['noscans'], vt_all - stats['tagged'], 
-                len(gt_dict)))
+    # sys.stderr.write(
+    #         "[-] Samples: %d NoScans: %d NoTags: %d GroundTruth: %d\n" % (
+    #             vt_all, stats['noscans'], vt_all - stats['tagged'], 
+    #             len(gt_dict)))
 
     # If ground truth, print precision, recall, and F1-measure
     if args.gt:
